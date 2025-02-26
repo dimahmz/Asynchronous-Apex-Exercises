@@ -28,7 +28,7 @@ private class AccountProcessorTest {
         // generate data for testing
 
         // generate 12 accounts with 3 contacts in each one
-        List<Acccount> accounts = TestFactory.generateAccountsWithContacts(12, 3);
+        List<Account> accounts = TestFactory.generateAccountsWithContacts(12, 3);
 
         // Create a list to hold the account IDs
         List<Id> accountIds = new List<Id>();
@@ -38,11 +38,17 @@ private class AccountProcessorTest {
             accountIds.add(acc.Id);
         }
 
-        AccountProcessor.countContacts(AccountIds);
+        // Call the countContacts method
+        Test.startTest();
+            AccountProcessor.countContacts(AccountIds);
+        Test.stopTest();
 
+        // get the updated accounts
+        List<Account> updated_accounts = [SELECT Number_Of_Contacts__c FROM Account WHERE Id IN :accountIds];
 
-        for(Account acc : accounts){
-            System.areEqual(acc.NumberOfContacts__c, 3, 'Account with the id : ' + acc.Id + ' has the wrong number of Contacts (Expected: 3, Actual: ' + acc.NumberOfContacts__c + ')');
+        // test the results
+        for(Account acc : updated_accounts){
+            System.assertEquals(3, acc.Number_Of_Contacts__c,'Account with the id : ' + acc.Id + ' has the wrong number of Contacts (Expected: 3, Actual: ' + acc.Number_Of_Contacts__c + ')');
         }
 
     }   
