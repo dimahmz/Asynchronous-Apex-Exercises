@@ -2,7 +2,6 @@
 public class TestFactory {
 
     // acounts with the same number of contacts
-    @isTest
     public static List<Account> generateAccountsWithContacts(Integer numAccounts, Integer  numContacts){
             List<Account> accounts = new List<Account>();
         
@@ -25,13 +24,12 @@ public class TestFactory {
             insert contacts;
         
             // Refresh the accounts list to include the inserted contacts
-            accounts = [SELECT Id, Name, (SELECT Id, LastName FROM Contacts) FROM Account WHERE Id IN :accounts];
+            List<Account> updated_accounts = [SELECT Id, 	Number_Of_Contacts__c , Name, (SELECT Id, LastName FROM Contacts) FROM Account WHERE Id IN :accounts];
         
-            return accounts;
+            return updated_accounts;
         }
 
     // acounts with different number of contacts
-    @isTest
     public static List<Account> generateAccountsWithContacts(Integer numAccounts, List<Integer> numContacts){
         List<Account> accounts = new List<Account>();
         for(Integer i = 0; i < numAccounts; i++){
@@ -51,9 +49,9 @@ public class TestFactory {
         }
         insert contacts;
 
-        accounts = [SELECT Id, Name, (SELECT Id, LastName FROM Contacts) FROM Account WHERE Id IN :accounts];
+        List<Account> updated_accounts = [SELECT Id, 	Number_Of_Contacts__c , Name, (SELECT Id, LastName FROM Contacts) FROM Account WHERE Id IN :accounts];
         
-        return accounts;
+        return updated_accounts;
     }
 
 
